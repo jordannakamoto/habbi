@@ -1,0 +1,5 @@
+Users have goals
+
+Goals contribute to the creation of activities
+
+Activity management is the key functionality of the app
