@@ -10,7 +10,6 @@ const LoginScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Button onPress={performOAuth} title="Sign in with Google" />
-      <Button onPress={() => sendMagicLink('example@email.com')} title="Send Magic Link" />
     </SafeAreaView>
   );
 };

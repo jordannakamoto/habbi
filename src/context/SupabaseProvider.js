@@ -11,6 +11,9 @@ import { createClient } from "@supabase/supabase-js";
 // Oauth Session
 import { makeRedirectUri } from 'expo-auth-session';
 
+//
+// # WARN  Value being stored in SecureStore is larger than 2048 bytes and it may not be stored successfully. In a future SDK version, this call may throw an error.
+// # Try another storage provider from Supabase/React Native documentation
 const ExpoSecureStoreAdapter = {
   getItem: (key) => SecureStore.getItemAsync(key),
   setItem: (key, value) => SecureStore.setItemAsync(key, value),
@@ -109,6 +112,7 @@ export const SupabaseProvider = ({ children }) => {
     }
   };
 
+  // # Not Used
   const sendMagicLink = async () => {
     const { error } = await supabase.auth.signInWithOtp({
       email: 'example@email.com',

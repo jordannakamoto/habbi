@@ -1,0 +1,6 @@
+OAuth seems to be working on Expo Go
+Redirect URL configured on supabase web UI
+https://github.com/orgs/supabase/discussions/2818
+
+== Improvements
+   - can improve error handling during auth proccess for user experience
