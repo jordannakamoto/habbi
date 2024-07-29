@@ -1,12 +1,15 @@
 // navigation/GlobalNavigation.js
 
-import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+// import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+// import RegisterScreen from '../screens/RegisterScreen';
+
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+
+import GoalScreen from '../screens/GoalScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import RegisterScreen from '../screens/RegisterScreen';
-import { createStackNavigator } from '@react-navigation/stack';
 import { useSupabase } from '../context/useSupabase';
 
 const Stack = createStackNavigator();
@@ -19,16 +22,23 @@ const GlobalNavigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={isLoggedIn ? 'Home' : 'Login'}
-        screenOptions={{ headerShown: false }}
+        screenOptions={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
       >
         {/* Only authenticated users can access the home */}
         {isLoggedIn ? (
+          <>
+          <Stack.Screen name="Goal" component={GoalScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+            
+            {/* <Stack.Screen name="Register" component={RegisterScreen} /> */}
+            {/* <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} /> */}
           </>
         )}
       </Stack.Navigator>
