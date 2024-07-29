@@ -7,6 +7,7 @@ const initialContext = {
   register: async (email, password) => {},
   forgotPassword: async (email) => {},
   logout: async () => {},
+  supabase: null,
 };
 
 // Create the context with the initial values

@@ -1,15 +1,16 @@
-import { SafeAreaView, Text, View } from 'react-native';
+import { Button, SafeAreaView } from 'react-native';
 
-// screens/LoginScreen.js
 import React from 'react';
 import styles from './styles1';
+import { useSupabase } from '../context/useSupabase'; // Import context hook
 
 const LoginScreen = () => {
+  const { performOAuth, sendMagicLink } = useSupabase(); // Use functions from context
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.largeTitle}>Login Screen</Text>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <Button onPress={performOAuth} title="Sign in with Google" />
+      <Button onPress={() => sendMagicLink('example@email.com')} title="Send Magic Link" />
     </SafeAreaView>
   );
 };
