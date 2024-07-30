@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 
 import { SupabaseContext } from "./SupabaseContext";
 import { createClient } from "@supabase/supabase-js";
+import { generateActivities } from '../api/chatgpt';
 // Oauth Session
 import { makeRedirectUri } from 'expo-auth-session';
 
@@ -25,6 +26,8 @@ export const SupabaseProvider = ({ children }) => {
   const [isNavigationReady, setNavigationReady] = useState(false);
   const [user, setUser] = useState(null);
   const [goals, setGoals] = useState([]);
+  const [activities, setActivities] = useState([]);
+
 
   const supabase = createClient(
     process.env.SUPABASE_URL,
@@ -77,6 +80,53 @@ export const SupabaseProvider = ({ children }) => {
       fetchGoals();
     }
   }, [user]);
+
+  // --- Activities --- //
+  useEffect(() => {
+    if (goals.length > 0) {
+      fetchActivities();
+    }
+  }, [goals]);
+
+  const fetchActivities = async () => {
+    const { data, error } = await supabase
+      .from('Activities')
+      .select('*')
+      .in('goal_id', goals.map(goal => goal.id));
+
+    if (error) throw error;
+    setActivities(data);
+  };
+
+  const storeActivities = async (goalId, activities) => {
+    const allActivities = activities.map(activity => ({
+      goal_id: goalId,
+      title: activity.title,
+      duration: activity.duration,
+    }));
+  
+    try {
+      const { data, error } = await supabase
+        .from('Activities')
+        .insert(allActivities);
+  
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error storing activities:', error);
+      throw error;
+    }
+  };
+
+  const generateAndStoreActivities = async (goalId, goalTitle, goalDescription) => {
+    try {
+      const activities = await generateActivities(goalTitle, goalDescription);
+      await storeActivities(goalId, activities);
+      fetchActivities();
+    } catch (error) {
+      console.error('Error generating and storing activities:', error);
+    }
+  };
 
   // --- Account Management --- //
   const login = async (email, password) => {
@@ -167,11 +217,10 @@ export const SupabaseProvider = ({ children }) => {
     if (error) throw error;
     // Email sent.
   };
-  // --- end login screen
 
   return (
     <SupabaseContext.Provider
-      value={{ isLoggedIn, user, goals, createGoal, updateGoal, login, register, forgotPassword, logout, createSessionFromUrl, performOAuth, sendMagicLink }}
+      value={{ isLoggedIn, user, goals, activities, storeActivities, fetchActivities,generateAndStoreActivities, createGoal, updateGoal, login, register, forgotPassword, logout, createSessionFromUrl, performOAuth, sendMagicLink }}
     >
       {isNavigationReady ? children : null}
     </SupabaseContext.Provider>

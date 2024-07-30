@@ -5,7 +5,7 @@ import styles from './styles1';
 import { useSupabase } from '../context/useSupabase';
 
 const GoalScreen = () => {
-  const { goals, createGoal, updateGoal } = useSupabase();
+  const { goals, createGoal, updateGoal, generateAndStoreActivities,  } = useSupabase();
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentGoal, setCurrentGoal] = useState(null);
   const [title, setTitle] = useState('');
@@ -41,6 +41,12 @@ const GoalScreen = () => {
     setDescription('');
     setModalVisible(true);
   };
+
+  const genActivities = async () => {
+    if (currentGoal) {
+      await generateAndStoreActivities(currentGoal.id, title, description);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -81,6 +87,7 @@ const GoalScreen = () => {
               multiline
             />
             <Button title="Save" onPress={handleSave} />
+            <Button title="Generate" onPress={genActivities} />
             <Button title="Cancel" onPress={() => setModalVisible(false)} />
           </View>
         </Modal>
