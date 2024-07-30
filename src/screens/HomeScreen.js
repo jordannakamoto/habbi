@@ -16,6 +16,7 @@ const HomeScreen = ({ navigation }) => {
         ) : (
           <Text>Not logged in</Text>
         )}
+        <Text style={styles.Title}>Recommendations</Text>
       </View>
     </SafeAreaView>
   );

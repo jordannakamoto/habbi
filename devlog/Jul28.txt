@@ -10,3 +10,8 @@ starting react native tab view
 -done
 //
 configuring supabase for goals table
+
+//
+setting up activities data fields
+indexed Goals > user_id and Activities > goal_id
+for faster join lookups2
