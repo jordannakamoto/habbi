@@ -4,3 +4,6 @@ https://github.com/orgs/supabase/discussions/2818
 
 == Improvements
    - can improve error handling during auth proccess for user experience
+
+//
+starting react native tab view

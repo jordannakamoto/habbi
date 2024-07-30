@@ -10,6 +10,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
+import TabNavigator from './TabNavigator';
 import { useSupabase } from '../context/useSupabase';
 
 const Stack = createStackNavigator();
@@ -30,8 +31,7 @@ const GlobalNavigation = () => {
         {/* Only authenticated users can access the home */}
         {isLoggedIn ? (
           <>
-          <Stack.Screen name="Goal" component={GoalScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Main" component={TabNavigator} />
           </>
         ) : (
           <>

@@ -1,17 +1,17 @@
-import { Button, SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 
 // screens/HomeScreen.js
 import React from 'react';
 import styles from './styles1';
 
-const HomeScreen = ({ navigation }) => {
+const ActivityScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.largeTitle}>Home Screen</Text>
+        <Text style={styles.largeTitle}>Activity Screen</Text>
       </View>
     </SafeAreaView>
   );
 };
 
-export default HomeScreen;
+export default ActivityScreen;
