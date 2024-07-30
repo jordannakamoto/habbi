@@ -7,3 +7,6 @@ https://github.com/orgs/supabase/discussions/2818
 
 //
 starting react native tab view
+-done
+//
+configuring supabase for goals table

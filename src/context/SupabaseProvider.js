@@ -23,6 +23,8 @@ const ExpoSecureStoreAdapter = {
 export const SupabaseProvider = ({ children }) => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isNavigationReady, setNavigationReady] = useState(false);
+  const [user, setUser] = useState(null);
+  const [goals, setGoals] = useState([]);
 
   const supabase = createClient(
     process.env.SUPABASE_URL,
@@ -37,6 +39,46 @@ export const SupabaseProvider = ({ children }) => {
     }
   );
 
+  // --- User Goals --- //
+  const createGoal = async (title, category, description) => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('Goals')
+      .insert([{ user_id: user.id, title, category, description }])
+      .select() // will ensure the created goal is returned with an id
+      .single();
+    if (error) throw error;
+    setGoals([...goals, data]);
+  };
+
+  const updateGoal = async (id, title, category, description) => {
+    const { data, error } = await supabase
+      .from('Goals')
+      .update({ title, category, description })
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) throw error;
+    setGoals(goals.map((goal) => (goal.id === id ? data : goal)));
+  };
+
+  const fetchGoals = async () => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('Goals')
+      .select('*')
+      .eq('user_id', user.id);
+    if (error) throw error;
+    setGoals(data);
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchGoals();
+    }
+  }, [user]);
+
+  // --- Account Management --- //
   const login = async (email, password) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -67,6 +109,7 @@ export const SupabaseProvider = ({ children }) => {
 
   const checkIfUserIsLoggedIn = async () => {
     const result = await supabase.auth.getSession();
+    setUser(result.data.session?.user ?? null);
     setLoggedIn(result.data.session !== null);
     setNavigationReady(true);
   };
@@ -124,10 +167,11 @@ export const SupabaseProvider = ({ children }) => {
     if (error) throw error;
     // Email sent.
   };
+  // --- end login screen
 
   return (
     <SupabaseContext.Provider
-      value={{ isLoggedIn, login, register, forgotPassword, logout, createSessionFromUrl, performOAuth, sendMagicLink }}
+      value={{ isLoggedIn, user, goals, createGoal, updateGoal, login, register, forgotPassword, logout, createSessionFromUrl, performOAuth, sendMagicLink }}
     >
       {isNavigationReady ? children : null}
     </SupabaseContext.Provider>
