@@ -21,14 +21,13 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.largeTitle}>Home Screen</Text>
+        {/* <Text style={styles.largeTitle}>Home Screen</Text>
         {user ? (
           <Text>Logged in as {user.email}</Text>
         ) : (
           <Text>Not logged in</Text>
-        )}
-        <Text style={styles.Title}>Recommendations</Text>
-        <Button title="Refresh Activities" onPress={refreshActivities} />
+        )} */}
+        {/* <Text style={styles.Title}>Recommendations</Text> */}
         <FlatList
           data={recommendedActivities}
           keyExtractor={(item) => item.id.toString()}
@@ -39,6 +38,8 @@ const HomeScreen = ({ navigation }) => {
             </View>
           )}
         />
+        <Button title="Refresh Activities" onPress={refreshActivities} />
+
       </View>
     </SafeAreaView>
   );
@@ -49,13 +50,13 @@ export default HomeScreen;
 const stylesHome = StyleSheet.create({
   // ... your styles here
   activityItem: {
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
   activityTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    // fontWeight: 'bold',
   },
   activityDuration: {
     fontSize: 14,

@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 
-import ActivityScreen from '../screens/ActivityScreen';
+import AttributeScreen from '../screens/AttributeScreen';
 import GoalScreen from '../screens/GoalScreen';
 import HomeScreen from '../screens/HomeScreen';
 import React from 'react';
@@ -11,7 +11,7 @@ const initialLayout = { width: Dimensions.get('window').width };
 const renderScene = SceneMap({
   goal: GoalScreen,
   home: HomeScreen,
-  activity: ActivityScreen,
+  attribute: AttributeScreen,
 });
 
 const renderTabBar = (props) => (
@@ -32,7 +32,7 @@ const TabNavigator = () => {
   const [routes] = React.useState([
     { key: 'goal', title: 'Goals' },
     { key: 'home', title: 'Home' },
-    { key: 'activity', title: 'Activities' },
+    { key: 'attribute', title: 'Attributes' },
   ]);
 
   return (

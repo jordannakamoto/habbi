@@ -27,7 +27,7 @@ export const SupabaseProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [goals, setGoals] = useState([]);
   const [activities, setActivities] = useState([]);
-
+  const [attributes, setAttributes] = useState([]);
 
   const supabase = createClient(
     process.env.SUPABASE_URL,
@@ -81,7 +81,7 @@ export const SupabaseProvider = ({ children }) => {
     }
   }, [user]);
 
-  // --- Activities --- //
+  // --- User Activities --- //
   useEffect(() => {
     if (goals.length > 0) {
       fetchActivities();
@@ -128,6 +128,58 @@ export const SupabaseProvider = ({ children }) => {
     }
   };
 
+  // --- User Attributes --- //
+  useEffect(() => {
+    if (user) {
+      fetchAttributes();
+    }
+  }, [user]);
+
+  const fetchAttributes = async () => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('Attributes')
+      .select('*')
+      .eq('user_id', user.id);
+    if (error) throw error;
+    setAttributes(data);
+  };
+
+  const createAttribute = async (title, category, description) => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('Attributes')
+      .insert([{ user_id: user.id, title, category, description }])
+      .select() // will ensure the created attribute is returned with an id
+      .single();
+    if (error) throw error;
+    setAttributes([...attributes, data]);
+  };
+
+  // . update an attribute for rating 0-100
+  const updateAttributeRating = async (id, rating) => {
+    const {data, error} = await supabase
+    .from('Attributes')
+    .update({rating})
+    .eq('id',id)
+    .select()
+    .single();
+    if (error) throw error;
+    setAttributes(attributes.map((attribute) => (attribute.id === id ? data : attribute)));
+  }
+
+  // ! todo
+  // const updateAttribute = async (id, title, category, description) => {
+  //   const { data, error } = await supabase
+  //     .from('Goals')
+  //     .update({ title, category, description })
+  //     .eq('id', id)
+  //     .select()
+  //     .single();
+  //   if (error) throw error;
+  //   setGoals(goals.map((goal) => (goal.id === id ? data : goal)));
+  // };
+
   // --- Account Management --- //
   const login = async (email, password) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -168,7 +220,7 @@ export const SupabaseProvider = ({ children }) => {
     checkIfUserIsLoggedIn();
   }, []);
 
-  // ----- Login Screen OAuth ----- //
+  // Login Screen OAuth //
   const redirectTo = makeRedirectUri();
 
   const createSessionFromUrl = async (url) => {

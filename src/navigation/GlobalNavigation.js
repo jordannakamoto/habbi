@@ -5,6 +5,7 @@
 
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
+import AttributeScreen from '../screens/AttributeScreen';
 import GoalScreen from '../screens/GoalScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -41,6 +42,7 @@ const GlobalNavigation = () => {
             {/* <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} /> */}
           </>
         )}
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

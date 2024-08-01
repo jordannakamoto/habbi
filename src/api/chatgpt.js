@@ -50,36 +50,60 @@ Long:
 };
 
 const parseActivities = (activitiesText) => {
-  const activities = [];
-
-  const shortRegex = /\*\*?Short:\*\*?\n([\s\S]*?)\n\n/i;
-  const mediumRegex = /\*\*?Medium:\*\*?\n([\s\S]*?)\n\n/i;
-  const longRegex = /\*\*?Long:\*\*?\n([\s\S]*?)\n\n/i;
+    const activities = [];
+    const activityRegex = /\d+\.\s(.*?)(?=\n\d+\.|\n\n|$)/g;
+    const matches = activitiesText.match(activityRegex);
   
-  const shortMatch = activitiesText.match(shortRegex);
-  const mediumMatch = activitiesText.match(mediumRegex);
-  const longMatch = activitiesText.match(longRegex);
+    if (matches) {
+      matches.forEach((activity, index) => {
+        const trimmedActivity = activity.replace(/^\d+\.\s*/, '').trim();
+        let duration = '';
+        if (index < 10) {
+          duration = 0;
+        } else if (index < 20) {
+          duration = 1;
+        } else {
+          duration = 2;
+        }
+        activities.push({ title: trimmedActivity, duration });
+      });
+    }
+  
+    return activities;
+  };
 
-  if (shortMatch) {
-    shortMatch[1].split('\n').forEach((activity, index) => {
-      const trimmedActivity = activity.replace(/^\d+\.\s*/, '').trim();
-      if (trimmedActivity) activities.push({ title: trimmedActivity, duration: 0 });
-    });
-  }
+// OLD
+// const parseActivities = (activitiesText) => {
+//   const activities = [];
 
-  if (mediumMatch) {
-    mediumMatch[1].split('\n').forEach((activity, index) => {
-      const trimmedActivity = activity.replace(/^\d+\.\s*/, '').trim();
-      if (trimmedActivity) activities.push({ title: trimmedActivity, duration: 1 });
-    });
-  }
+//   const shortRegex = /\*\*?Short:\*\*?\n([\s\S]*?)\n\n/i;
+//   const mediumRegex = /\*\*?Medium:\*\*?\n([\s\S]*?)\n\n/i;
+//   const longRegex = /\*\*?Long:\*\*?\n([\s\S]*?)\n\n/i;
+  
+//   const shortMatch = activitiesText.match(shortRegex);
+//   const mediumMatch = activitiesText.match(mediumRegex);
+//   const longMatch = activitiesText.match(longRegex);
 
-  if (longMatch) {
-    longMatch[1].split('\n').forEach((activity, index) => {
-      const trimmedActivity = activity.replace(/^\d+\.\s*/, '').trim();
-      if (trimmedActivity) activities.push({ title: trimmedActivity, duration: 2 });
-    });
-  }
+//   if (shortMatch) {
+//     shortMatch[1].split('\n').forEach((activity, index) => {
+//       const trimmedActivity = activity.replace(/^\d+\.\s*/, '').trim();
+//       if (trimmedActivity) activities.push({ title: trimmedActivity, duration: 0 });
+//     });
+//   }
 
-  return activities;
-};
+//   if (mediumMatch) {
+//     mediumMatch[1].split('\n').forEach((activity, index) => {
+//       const trimmedActivity = activity.replace(/^\d+\.\s*/, '').trim();
+//       if (trimmedActivity) activities.push({ title: trimmedActivity, duration: 1 });
+//     });
+//   }
+
+//   if (longMatch) {
+//     longMatch[1].split('\n').forEach((activity, index) => {
+//       const trimmedActivity = activity.replace(/^\d+\.\s*/, '').trim();
+//       if (trimmedActivity) activities.push({ title: trimmedActivity, duration: 2 });
+//     });
+//   }
+
+//   return activities;
+// };
